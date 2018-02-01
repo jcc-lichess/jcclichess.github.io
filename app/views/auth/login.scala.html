@@ -1,0 +1,31 @@
+@(form: Form[_], referrer: Option[String])(implicit ctx: Context)
+
+@auth.layout(title = trans.signIn.txt()) {
+<div class="content_box login">
+  <div class="signup_box">
+    <h1 class="lichess_title">@trans.signIn()</h1>
+    <form action="@routes.Auth.authenticate?referrer=@referrer" method="POST">
+      @globalError(form)
+      <ul>
+        @auth.formFields(form("username"), form("password"), none, register = false)
+        <li>
+          <button type="submit" class="submit button" data-icon="F"> @trans.signIn()</button>
+        </li>
+      </ul>
+    </form>
+  </div>
+  <div class="alternative">
+    @trans.newToLichess()
+    <br />
+    <br />
+    <a href="@routes.Auth.signup()" class="button" data-icon="F"> @trans.signUp()</a>
+    <br />
+    <br />
+    <br />
+    @trans.forgotPassword()
+    <br />
+    <br />
+    <a href="@routes.Auth.passwordReset()" class="button" data-icon="F"> @trans.passwordReset()</a>
+  </div>
+</div>
+}

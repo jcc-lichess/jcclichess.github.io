@@ -1,0 +1,7 @@
+@(field: Field, name: Html)(implicit ctx: Context)
+
+@base.form.group(field, name) {
+<input class="passwd" type="password" required="required"
+name="@field.name" value="@field.value"/>
+@errMsg(field)
+}

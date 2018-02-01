@@ -1,0 +1,26 @@
+{
+  "name": "site",
+  "version": "1.0.0",
+  "description": "lichess.org website",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thibault Duplessis",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "browserify": "^14",
+    "gulp": "^3",
+    "gulp-concat": "^2.6",
+    "gulp-download-stream": "^0.0",
+    "gulp-streamify": "^1",
+    "gulp-uglify": "^3",
+    "gulp-util": "^3",
+    "request": "^2",
+    "uglify-js": "^2",
+    "vinyl-source-stream": "^1"
+  },
+  "dependencies": {
+    "tablesort": "^5.0.0"
+  }
+}

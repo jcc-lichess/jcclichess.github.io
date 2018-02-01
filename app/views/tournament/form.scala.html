@@ -1,0 +1,103 @@
+@(form: Form[_], config: lila.tournament.DataForm, me: User)(implicit ctx: Context)
+
+@import config._
+@import lila.tournament.DataForm._
+
+@moreJs = {
+@jsTag("tournamentForm.js")
+}
+
+@tournament.layout(
+title = s"${trans.newTournament()}",
+moreJs = moreJs) {
+<div id="tournament">
+  <div class="content_box small_box tournament_box">
+    <h1>@trans.createANewTournament()</h1>
+
+    <form class="plain create content_box_content" action="@routes.Tournament.create" method="POST">
+      <input type="hidden" name="@form("system").id" value="1" />
+      @globalError(form)
+      <table>
+        <tr>
+          <th><label for="isprivate">@trans.isPrivate()</label></th>
+          <td><input type="checkbox" name="private" id="isprivate" @if(form("private").value.isDefined) { checked } /></td>
+        </tr>
+        <tr class="password">
+          <th><label for="@form("password").id">@trans.password()</label></th>
+          <td>@base.form.input(form("password"))</td>
+        </tr>
+        @if(lila.tournament.DataForm.canPickName(me)) {
+        <tr class="name">
+          <th><label for="@form("name").id">@trans.name()</label></th>
+          <td>
+            <style>.tournament_box form.create input[name=name] { width: 15em!important; }</style>
+            @base.form.input(form("name")) Arena<br />
+            @errMsg(form("name"))
+            Pick a <strong>very safe name</strong> for the tournament.<br />
+            Anything even <strong>slightly inappropriate</strong> could get your account closed.<br />
+            Leave empty to name the tournament after a random Grandmaster.
+          </td>
+        </tr>
+        }
+        <tr class="variant">
+          <th><label for="@form("variant").id">@trans.variant()</label></th>
+          <td>@base.form.select(form("variant"), translatedVariantChoicesWithVariants.map(x => x._1 -> x._2))</td>
+        </tr>
+        <tr class="position">
+          <th><label for="@form("position").id">@trans.startPosition()</label></th>
+          <td>
+            @tournament.startingPosition(form("position"))
+          </td>
+        </tr>
+        <tr>
+          <th><label for="@form("mode").id">@trans.mode()</label></th>
+          <td>
+            @base.form.select(form("mode"), translatedModeChoices.map(x => x._1 -> x._2))
+          </td>
+        </tr>
+        <tr class="time">
+          <th><label>@trans.timeControl()</label></th>
+          <td class="inline"></td>
+        </tr>
+        <tr class="minutes">
+          <th><label for="@form("minutes").id">@trans.duration()</label></th>
+          <td></td>
+        </tr>
+        <tr>
+          <th><label for="@form("waitMinutes").id">@trans.timeBeforeTournamentStarts()</label></th>
+          <td>@base.form.select(form("waitMinutes"), waitMinuteChoices)</td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <button type="submit" class="submit button" data-icon="g">
+              @trans.createANewTournament()
+            </button>
+            <br /><br />
+            <a href="@routes.Tournament.home()">@trans.cancel()</a>
+          </td>
+        </tr>
+      </table>
+    </form>
+    <div class="none private_time">
+      @base.form.select(form("clockTime"), clockTimePrivateChoices)
+      +
+      @base.form.select(form("clockIncrement"), clockIncrementPrivateChoices)
+    </div>
+    <div class="none public_time">
+      @base.form.select(form("clockTime"), clockTimeChoices)
+      +
+      @base.form.select(form("clockIncrement"), clockIncrementChoices)
+    </div>
+    <div class="none private_minutes">
+      @base.form.select(form("minutes"), minutePrivateChoices)
+    </div>
+    <div class="none public_minutes">
+      @base.form.select(form("minutes"), minuteChoices)
+    </div>
+  </div>
+  <div class="content_box small_box faq_box tournament_box">
+    <div class="content_box_content">@tournament.faq()</div>
+  </div>
+</div>
+}
